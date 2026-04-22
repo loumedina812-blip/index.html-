@@ -1,0 +1,235 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Pop-Ed B2 | Streaming Success</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <style>
+        body { background-color: #141414; color: white; font-family: 'Helvetica Neue', Helvetica, Arial, sans-serif; overflow-x: hidden; }
+        .netflix-red { color: #E50914; }
+        .hero-gradient { background: linear-gradient(to top, #141414 10%, transparent 100%); }
+        .hide-scroll { -ms-overflow-style: none; scrollbar-width: none; }
+        .hide-scroll::-webkit-scrollbar { display: none; }
+        .modal-overlay { transition: opacity 0.3s ease; opacity: 0; pointer-events: none; }
+        .modal-overlay.active { opacity: 1; pointer-events: auto; }
+        .tab-btn.active { border-bottom: 4px solid #E50914; color: white; }
+    </style>
+</head>
+<body>
+
+    <nav class="fixed top-0 w-full z-50 flex items-center px-6 py-4 bg-gradient-to-b from-black to-transparent">
+        <h1 class="text-3xl font-bold netflix-red tracking-tighter mr-8">POP-ED</h1>
+        <div class="flex space-x-4 text-sm font-medium text-gray-300">
+            <span>Series</span>
+            <span>Films</span>
+            <span>New & Popular</span>
+        </div>
+    </nav>
+
+    <header class="relative h-[80vh] flex items-center px-12">
+        <div class="absolute inset-0 z-0">
+            <img src="https://images.unsplash.com/photo-1501612722273-30513edb7375?auto=format&fit=crop&q=80&w=2000" class="w-full h-full object-cover opacity-50">
+            <div class="absolute inset-0 hero-gradient"></div>
+        </div>
+        <div class="relative z-10 max-w-xl">
+            <h2 class="text-6xl font-extrabold mb-4">Cambridge Hits</h2>
+            <p class="text-lg mb-6">Master B2 English through the lives of the world's biggest icons. Select an artist to begin your learning journey.</p>
+        </div>
+    </header>
+
+    <main class="px-12 -mt-32 relative z-20 pb-20">
+        <h3 class="text-xl font-bold mb-4">Trending Now</h3>
+        <div class="flex space-x-4 overflow-x-auto hide-scroll pb-4">
+            <div onclick="openShow('taylor')" class="flex-none w-64 cursor-pointer transform hover:scale-105 transition">
+                <img src="https://images.unsplash.com/photo-1598387181032-a3103a2db5b3?w=500" class="rounded-md h-36 w-full object-cover">
+                <p class="mt-2 font-bold">Taylor Swift</p>
+            </div>
+            <div onclick="openShow('harry')" class="flex-none w-64 cursor-pointer transform hover:scale-105 transition">
+                <img src="https://images.pexels.com/photos/1916824/pexels-photo-1916824.jpeg?w=500" class="rounded-md h-36 w-full object-cover">
+                <p class="mt-2 font-bold">Harry Styles</p>
+            </div>
+            <div onclick="openShow('coldplay')" class="flex-none w-64 cursor-pointer transform hover:scale-105 transition">
+                <img src="https://images.pexels.com/photos/1105666/pexels-photo-1105666.jpeg?w=500" class="rounded-md h-36 w-full object-cover">
+                <p class="mt-2 font-bold">Coldplay</p>
+            </div>
+            <div onclick="openShow('abba')" class="flex-none w-64 cursor-pointer transform hover:scale-105 transition">
+                <img src="https://images.pexels.com/photos/144428/pexels-photo-144428.jpeg?w=500" class="rounded-md h-36 w-full object-cover">
+                <p class="mt-2 font-bold">ABBA</p>
+            </div>
+            <div onclick="openShow('louis')" class="flex-none w-64 cursor-pointer transform hover:scale-105 transition">
+                <img src="https://images.pexels.com/photos/167636/pexels-photo-167636.jpeg?w=500" class="rounded-md h-36 w-full object-cover">
+                <p class="mt-2 font-bold">Louis Tomlinson</p>
+            </div>
+        </div>
+    </main>
+
+    <div id="modal" class="modal-overlay fixed inset-0 z-[100] bg-black/90 flex justify-center items-start overflow-y-auto pt-10">
+        <div class="bg-[#181818] w-full max-w-4xl rounded-lg overflow-hidden relative mb-10 mx-4">
+            <button onclick="closeShow()" class="absolute top-4 right-4 text-3xl font-light hover:text-red-600 z-50">✕</button>
+            
+            <div class="h-64 relative">
+                <img id="modal-banner" src="" class="w-full h-full object-cover opacity-60">
+                <div class="absolute bottom-6 left-10">
+                    <h2 id="modal-title" class="text-4xl font-bold"></h2>
+                </div>
+            </div>
+
+            <div class="flex border-b border-gray-700 px-10 space-x-8">
+                <button onclick="switchTab('bio')" id="tab-bio" class="tab-btn py-4 text-gray-400 font-bold active">EPISODES (BIO)</button>
+                <button onclick="switchTab('vocab')" id="tab-vocab" class="tab-btn py-4 text-gray-400 font-bold">TRAILERS (VOCAB)</button>
+                <button onclick="switchTab('exam')" id="tab-exam" class="tab-btn py-4 text-gray-400 font-bold text-red-500">COMING SOON (EXAM)</button>
+            </div>
+
+            <div class="p-10 min-h-[400px]">
+                <div id="content-bio" class="tab-content">
+                    <h3 class="text-xl font-bold mb-4">Episode 1: The Journey</h3>
+                    <p id="bio-text" class="text-gray-300 leading-relaxed text-lg"></p>
+                </div>
+
+                <div id="content-vocab" class="tab-content hidden">
+                    <h3 class="text-xl font-bold mb-4">Essential B2 Vocabulary</h3>
+                    <div id="vocab-list" class="grid grid-cols-1 md:grid-cols-2 gap-4"></div>
+                </div>
+
+                <div id="content-exam" class="tab-content hidden">
+                    <div class="bg-red-900/10 border border-red-900/40 p-6 rounded">
+                        <h3 class="text-xl font-bold mb-2">Cambridge Use of English Part 3/4</h3>
+                        <p id="exam-instr" class="text-sm text-gray-400 mb-6">Complete the second sentence so that it has a similar meaning to the first sentence, using the word given.</p>
+                        <div class="space-y-6">
+                            <p id="exam-q" class="text-lg italic"></p>
+                            <input type="text" id="userInput" class="w-full bg-black border border-gray-700 p-3 rounded text-white" placeholder="Type your answer...">
+                            <button onclick="checkAnswer()" class="bg-red-600 px-8 py-2 rounded font-bold uppercase tracking-wider">Unlock Answer</button>
+                            <p id="feedback" class="hidden font-bold pt-2"></p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        const artists = {
+            taylor: {
+                name: "Taylor Swift",
+                img: "https://images.unsplash.com/photo-1598387181032-a3103a2db5b3?w=1000",
+                bio: "Taylor Swift began her career in Nashville, reinventing herself from a country prodigy into a global pop phenomenon. Her career is a testament to <b>resilience</b> and <b>versatility</b>, as she has navigated the <b>treacherous</b> industry while maintaining a <b>devoted</b> fan base.",
+                vocab: [
+                    ["Prodigy", "A person, especially a young one, endowed with exceptional qualities or abilities."],
+                    ["Resilience", "The capacity to recover quickly from difficulties; toughness."],
+                    ["Versatility", "Ability to adapt or be adapted to many different functions or activities."],
+                    ["Treacherous", "Guiltily betraying trust; or (of ground/water) hazardous."]
+                ],
+                exam: "It is certain that Taylor will win another award. (BOUND)<br><br>Taylor _________ win another award.",
+                correct: "is bound to"
+            },
+            harry: {
+                name: "Harry Styles",
+                img: "https://images.pexels.com/photos/1916824/pexels-photo-1916824.jpeg?w=1000",
+                bio: "After the <b>unprecedented</b> success of One Direction, Harry Styles embarked on a solo career that challenged <b>conventional</b> gender norms. His work is characterized by a <b>fusion</b> of rock, pop, and soul, making him an <b>influential</b> figure in modern fashion and music.",
+                vocab: [
+                    ["Unprecedented", "Never done or known before."],
+                    ["Conventional", "Based on or in accordance with what is generally done or believed."],
+                    ["Fusion", "The process or result of joining two or more things together to form a single entity."],
+                    ["Influential", "Having great influence on someone or something."]
+                ],
+                exam: "Harry didn't mean to break the guitar. (INTENTION)<br><br>Harry had _________ the guitar.",
+                correct: "no intention of breaking"
+            },
+            abba: {
+                name: "ABBA",
+                img: "https://images.pexels.com/photos/144428/pexels-photo-144428.jpeg?w=1000",
+                bio: "ABBA’s <b>extraordinary</b> rise began with Eurovision 1974. Their music consists of <b>infectious</b> melodies that have <b>endured</b> for decades. Despite their <b>hiatus</b> in the 80s, their legacy was cemented by the 'Mamma Mia!' franchise.",
+                vocab: [
+                    ["Extraordinary", "Very unusual or remarkable."],
+                    ["Infectious", "Likely to spread or influence others in a rapid manner."],
+                    ["Endured", "Remained in existence; lasted."],
+                    ["Hiatus", "A pause or gap in a sequence, series, or process."]
+                ],
+                exam: "ABBA was very successful because they worked hard. (RESULT)<br><br>ABBA's success was _________ their hard work.",
+                correct: "the result of"
+            },
+            coldplay: {
+                name: "Coldplay",
+                img: "https://images.pexels.com/photos/1105666/pexels-photo-1105666.jpeg?w=1000",
+                bio: "Coldplay's <b>breakthrough</b> album 'Parachutes' showcased their <b>distinctive</b> sound. Over time, they have <b>embraced</b> a more colorful, stadium-filling aesthetic, often incorporating <b>environmental</b> themes into their global tours.",
+                vocab: [
+                    ["Breakthrough", "A sudden, dramatic, and important discovery or development."],
+                    ["Distinctive", "Characteristic of one person or thing, and so serving to distinguish it from others."],
+                    ["Embraced", "Accept or support (a belief, theory, or change) willingly and enthusiastically."],
+                    ["Environmental", "Relating to the natural world and the impact of human activity on its condition."]
+                ],
+                exam: "The concert was so good that I'll never forget it. (SUCH)<br><br>It was _________ that I'll never forget it.",
+                correct: "such a good concert"
+            },
+            louis: {
+                name: "Louis Tomlinson",
+                img: "https://images.pexels.com/photos/167636/pexels-photo-167636.jpeg?w=1000",
+                bio: "Louis Tomlinson has found his <b>niche</b> in indie-rock. He is known for his <b>lyrical</b> honesty and the <b>intensity</b> of his live performances. He <b>prioritizes</b> his connection with fans over mainstream chart trends.",
+                vocab: [
+                    ["Niche", "A specialized segment of the market for a particular kind of product or service."],
+                    ["Lyrical", "Expressing the writer's emotions in an imaginative and beautiful way."],
+                    ["Intensity", "The quality of being very strong or extreme."],
+                    ["Prioritizes", "Designates or treats (something) as more important than other things."]
+                ],
+                exam: "I'm sure Louis was happy to see the fans. (MUST)<br><br>Louis _________ happy to see the fans.",
+                correct: "must have been"
+            }
+        };
+
+        let activeArtist = '';
+
+        function openShow(id) {
+            activeArtist = id;
+            const data = artists[id];
+            document.getElementById('modal-title').innerText = data.name;
+            document.getElementById('modal-banner').src = data.img;
+            document.getElementById('bio-text').innerHTML = data.bio;
+            
+            // Generate Vocab
+            const vList = document.getElementById('vocab-list');
+            vList.innerHTML = data.vocab.map(v => `
+                <div class="bg-white/5 p-4 rounded border border-white/10">
+                    <span class="text-red-500 font-bold">${v[0]}:</span> <span class="text-sm">${v[1]}</span>
+                </div>
+            `).join('');
+
+            // Generate Exam
+            document.getElementById('exam-q').innerHTML = data.exam;
+            document.getElementById('userInput').value = "";
+            document.getElementById('feedback').classList.add('hidden');
+
+            switchTab('bio');
+            document.getElementById('modal').classList.add('active');
+            document.body.style.overflow = 'hidden';
+        }
+
+        function switchTab(tab) {
+            document.querySelectorAll('.tab-content').forEach(c => c.classList.add('hidden'));
+            document.querySelectorAll('.tab-btn').forEach(b => b.classList.remove('active'));
+            document.getElementById('content-' + tab).classList.remove('hidden');
+            document.getElementById('tab-' + tab).classList.add('active');
+        }
+
+        function checkAnswer() {
+            const input = document.getElementById('userInput').value.toLowerCase().trim();
+            const correct = artists[activeArtist].correct;
+            const fb = document.getElementById('feedback');
+            
+            fb.classList.remove('hidden', 'text-green-500', 'text-red-500');
+            if (input === correct) {
+                fb.innerText = "✓ CORRECT! Perfect B2 Grammar.";
+                fb.classList.add('text-green-500');
+            } else {
+                fb.innerText = `✗ INCORRECT. Correct answer: ${correct.toUpperCase()}`;
+                fb.classList.add('text-red-500');
+            }
+        }
+
+        function closeShow() {
+            document.getElementById('modal').classList.remove('active');
+            document.body.style.overflow = 'auto';
+        }
+    </script>
+</body>
+</html>
